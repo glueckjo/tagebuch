@@ -51,7 +51,8 @@
 			}
 
 			$uname = $unameL.$unameF;
-
+			
+			return $uname;
 
 
 			
