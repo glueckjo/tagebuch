@@ -10,15 +10,15 @@
 		protected $pword = '';
 		protected $role = 1;
 
-		function __construct(string $fname, string $lname, string $pword)
+		function __construct( string $fname, string $lname, string $pword )
 		{
 			//$this->uname = checkUname(createUname($fname, $lname));
 			//$this->uname = createUname($fname, $lname);
 			//$this->uname = $lname.$fname;
-			$this->uname = $this->checkUname($this->createUname($fname, $lname));
+			$this->uname = $this->checkUname( $this->createUname( $fname, $lname ) );
 
 			// Passwort-Hash in Methode auslagern?
-			$this->pword = password_hash($pword, PASSWORD_DEFAULT);
+			$this->pword = password_hash( $pword, PASSWORD_DEFAULT );
 
 			$this->fname = $fname;
 			$this->lname = $lname;
@@ -63,13 +63,13 @@
 		/*!**** entfernen, wenn writeToDB() implementiert wurde ****!*/
 
 
-		public function setRole(int $role){
+		public function setRole( int $role ){
 			$this->role = $role;
 		}
 
 
 
-		private function createUname(string $fname, string $lname){
+		private function createUname( string $fname, string $lname ){
 
 			$umlaut = array('Ä', 'Ö', 'Ü', 'ä', 'ö', 'ü', 'ß');
 			$ersatz = array('Ae', 'Oe', 'Ue', 'ae', 'oe', 'ue', 'ss');
@@ -87,7 +87,7 @@
 
 			$uname = $unameL.$unameF;
 			
-			return strtolower($uname);
+			return strtolower( $uname );
 
 
 			
@@ -95,7 +95,7 @@
 			
 		}
 
-		private function checkUname(string $uname){
+		private function checkUname( string $uname ){
 			try {
 				$db = new PDO('mysql:host=localhost;dbname=tagebuch', 'root', '');
 				$query = 'SELECT uname FROM tbl_user WHERE uname = :uname';
@@ -106,8 +106,8 @@
 				/* fetch reicht, ein Eintrag bedeutet, dass die While-Schleife durchlaufen wird. */
 				$entry_exists = $stmt->fetch();	
 				$count = 1;
-				while($entry_exists){
-					if($count>9){
+				while( $entry_exists ){
+					if( $count>9 ){
 						$uname = substr($uname, 0 , 6).$count;
 					}else{
 						$uname = substr($uname, 0, 7).$count;
@@ -118,8 +118,8 @@
 					$count++;
 				}
 				return $uname;
-			} catch (PDOException $e) {
-				die('DB-Error: '.$e->getMessage());
+			} catch ( PDOException $e ) {
+				die( 'DB-Error: '.$e->getMessage() );
 			}
 		}
 
