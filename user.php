@@ -1,5 +1,5 @@
 <?php 
-	
+	require_once 'lib_inc_db.php';
 	class User
 	{
 		/* Erzeugung von PDO sollte ausgelagert werden*/

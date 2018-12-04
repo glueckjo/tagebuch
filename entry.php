@@ -1,6 +1,9 @@
 <?php
-	class entry{
+	require_once 'lib_inc_db.php';
 
+	class Entry{
+
+		
 		protected $entryID;
 		protected $content = "";
 		protected $userName = "";
@@ -23,7 +26,9 @@
 			$this->entryPublic = $entryPublic;
 		}
 		*/
-		function setEntryID($entryID){
+
+
+		public function setEntryID($entryID){
 			$this->entryID = $entryID;
 		}
 		
@@ -55,6 +60,27 @@
 
 		function getVisible(){
 			return $this->visible;
+		}
+
+		function writeDB(string $dbName){
+			
+			if($db = connectDB($dbName)){
+				try {
+					$stmt = $db->prepare('INSERT INTO tbl_entry (uname, content, entryPublic, entryVisible) VALUES (:uname, :content, :entryPublic, :entryVisible)');
+					$stmt->bindValue(':uname', $this->userName);
+					$stmt->bindValue(':content', $this->content);
+					$stmt->bindValue(':entryPublic', $this->entryPublic);
+					$stmt->bindValue(':entryVisible', $this->visible);
+					$stmt->execute();
+				} catch (PDOException $e) {
+					echo 'DB_ERROR: ' . $e->getMessage();
+				} finally {
+					$db = null;
+					$stmt = null;
+				}
+				
+			}
+			
 		}
 	}
 ?>
