@@ -1,24 +1,35 @@
 <?php
 	class entry{
 
-		protected $entryID = "";
+		protected $entryID;
 		protected $content = "";
 		protected $userName = "";
-		protected $visible =  "";
-		protected $entryPublic = "";
+		protected $visible = true;
+		protected $entryPublic = false;
 
-		function __construct($content, $userName, $visible, $entryPublic){
+		//Erzeugen eines Entry-Objektes beim Eintragen
+		function __construct(string $content, string $userName, bool $visible, bool $entryPublic){
 			$this->content = $content;
 			$this->userName = $userName;
 			$this->visible = $visible;
 			$this->entryPublic = $entryPublic;
 		}
 
+		/* Erzeugen eines Entry-Objektes aus der DB: in PHP gibt es kein Überladen von Funktionen / Methoden, da müssen wir uns noch was überlegen (eigene entryFromDB Klasse?)
+		function __construct(string $content, string $userName, bool $visible, bool $entryPublic, int entryID){
+			$this->content = $content;
+			$this->userName = $userName;
+			$this->visible = $visible;
+			$this->entryPublic = $entryPublic;
+		}
+		*/
 		function setEntryID($entryID){
 			$this->entryID = $entryID;
 		}
+		
 
-		function setViseble($visible){
+		//Visible
+		function setVisible($visible){
 			$this->visible = $visible;
 		}
 
