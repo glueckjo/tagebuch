@@ -1,8 +1,8 @@
 <?php 
-	include_once 'user.php';
-	include_once 'entry.php';
+	require_once 'user.php';
+	require_once 'entry.php';
 	//include_once 'lib_inc_db.php';
-	include_once 'entry_from_db.php';
+	require_once 'entry_from_db.php';
 
 
 	$user1 = new User('Super', 'Admin', '1Passwort!');
