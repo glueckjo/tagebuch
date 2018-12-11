@@ -24,21 +24,7 @@
 			$this->lname = $lname;
 
 			
-			// $umlaut = array('Ä', 'Ö', 'Ü', 'ä', 'ö', 'ü', 'ß');
-			// $ersatz = array('Ae', 'Oe', 'Ue', 'ae', 'oe', 'ue', 'ss');
-			// $lname = str_replace($umlaut, $ersatz, $lname);
-			// $fname = str_replace($umlaut, $ersatz, $fname);
-
-			// /*Erste 6 Buchstaben des Nachnamens und die ersten 2 des Vornamens konkatenieren
-			// Falls Name(n) zu kurz: ganze(n) Namen konkatenieren*/
-			// if (!$unameL = substr($lname, 0, 6)){
-			// 	$unameL = $lname;
-			// }
-			// if(!$unameF = substr($fname, 0, 2)){
-			// 	$unameF = $fname;
-			// }
-
-			// $this->uname = strtolower($unameL.$unameF);
+			
 			
 		}
 
