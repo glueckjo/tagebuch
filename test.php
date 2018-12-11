@@ -2,20 +2,29 @@
 	require_once 'user.php';
 	require_once 'entry.php';
 	//include_once 'lib_inc_db.php';
-	require_once 'entry_from_db.php';
+	//require_once 'entry_from_db.php';
 
 
-	$user1 = new User('Super', 'Admin', '1Passwort!');
+	$user1 = new User('Zweiter', 'Tester', '1Passwort');
+
+	$user2 = new User('Super', 'Admin', '2Passwort');
+	$user2->setRole(2);
+	$user2->writeToDB();
 	var_dump($user1->getFname());
 	var_dump($user1->getUname());
 	var_dump($user1->getLname());
 	//var_dump($user1->getPWordTestingOnly());
+	$user1->writeToDB();
 
-	$entry1 = new Entry('Das ist ein Test-Eintrag', 'adminsu', true, true);
+	$entry1 = new Entry($entries = ['content' => 'Das ist ein zweiter Test-Eintrag', 'uname' => 'adminsu', 'entryPublic' => true,'entryVisible' => true]);
 	var_dump($entry1->getContent());
 	$entry1->writeDB('tagebuch');
 
-	$entry2 = new EntryFromDB();
+
+	$entry2 = new Entry(Entry::readFromDB(9));
+	var_dump($entry2->getContent());
+	var_dump($entry2->getEntryID());
+	var_dump($entry2->getUserName());
 	//$entry2->readFromDB();
 
  ?>

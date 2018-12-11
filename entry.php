@@ -11,11 +11,15 @@
 		protected $entryPublic = false;
 
 		//Erzeugen eines Entry-Objektes beim Eintragen
-		function __construct(string $content, string $userName, bool $visible, bool $entryPublic){
-			$this->content = $content;
-			$this->userName = $userName;
-			$this->visible = $visible;
-			$this->entryPublic = $entryPublic;
+		function __construct(array $entryArray){
+			if(isset($entryArray['entry_ID'])){
+				$this->entryID = $entryArray['entry_ID'];
+			}
+
+			$this->content = $entryArray['content'];
+			$this->userName = $entryArray['uname'];
+			$this->visible = $entryArray['entryVisible'];
+			$this->entryPublic = $entryArray['entryPublic'];
 		}
 
 		/* Erzeugen eines Entry-Objektes aus der DB: in PHP gibt es kein Überladen von Funktionen / Methoden, da müssen wir uns noch was überlegen (eigene entryFromDB Klasse?)
@@ -62,9 +66,9 @@
 			return $this->visible;
 		}
 
-		function writeDB(string $dbName){
+		public function writeDB(){
 			
-			if($db = connectDB($dbName)){
+			if($db = connectDB('tagebuch')){
 				try {
 					$stmt = $db->prepare('INSERT INTO tbl_entry (uname, content, entryPublic, entryVisible) VALUES (:uname, :content, :entryPublic, :entryVisible)');
 					$stmt->bindValue(':uname', $this->userName);
@@ -81,6 +85,27 @@
 				
 			}
 			
+		}
+		public static function readFromDB(int $entry_ID){
+			//var_dump($db = connectDB('tagebuch'));
+			
+			
+
+			
+			if($db = connectDB('tagebuch')){
+				try {
+					$stmt = $db->prepare('SELECT * FROM tbl_entry WHERE entry_ID = :entry_ID');
+					$stmt->bindValue(':entry_ID', $entry_ID);
+					$stmt->execute();
+					return $entryArray = $stmt->fetch(PDO::FETCH_ASSOC);
+
+				} catch (PDOException $e) {
+					echo $e->getMessage();
+				}
+
+				
+
+			}
 		}
 	}
 ?>

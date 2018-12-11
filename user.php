@@ -83,7 +83,7 @@
 
 		private function checkUname(string $uname){
 			try {
-				$db = new PDO('mysql:host=localhost;dbname=tagebuch', 'root', '');
+				$db = connectDB('tagebuch');
 				$query = 'SELECT uname FROM tbl_user WHERE uname = :uname';
 				$stmt = $db->prepare($query);
 				$stmt->bindValue(':uname', $uname);
@@ -105,7 +105,30 @@
 				}
 				return $uname;
 			} catch (PDOException $e) {
-				die('DB-Error: '.$e->getMessage());
+				echo $e->getMessage();
+			} finally {
+				$db = null;
+				$stmt = null;
+			}
+		}
+
+		public function writeToDB(){
+			try {
+				$db = connectDB('tagebuch');
+				$sql = 'INSERT INTO tbl_user (uname, fname, lname, pword, role) VALUES (:uname, :fname, :lname, :pword, :role)';
+				$stmt = $db->prepare($sql);
+				$stmt->bindValue(':uname', $this->uname);
+				$stmt->bindValue(':fname', $this->fname);
+				$stmt->bindValue(':lname', $this->lname);
+				$stmt->bindValue(':pword', $this->pword);
+				$stmt->bindValue(':role', $this->role);
+				$stmt->execute();
+
+			} catch (PDOException $e) {
+				echo $e->getMessage();
+			} finally {
+				$db = null;
+				$stmt = null;
 			}
 		}
 
