@@ -84,26 +84,29 @@
 		private function checkUname(string $uname){
 			try {
 				$db = connectDB('tagebuch');
-				$query = 'SELECT uname FROM tbl_user WHERE uname = :uname';
-				$stmt = $db->prepare($query);
-				$stmt->bindValue(':uname', $uname);
-				$stmt->execute();
-
-				/* fetch reicht, ein Eintrag bedeutet, dass die While-Schleife durchlaufen wird. */
-				$entry_exists = $stmt->fetch();	
-				$count = 1;
-				while($entry_exists){
-					if($count>9){
-						$uname = substr($uname, 0 , 6).$count;
-					}else{
-						$uname = substr($uname, 0, 7).$count;
-					}
+				if($db){
+					$query = 'SELECT uname FROM tbl_user WHERE uname = :uname';
+					$stmt = $db->prepare($query);
 					$stmt->bindValue(':uname', $uname);
 					$stmt->execute();
-					$entry_exists = $stmt->fetch();
-					$count++;
+
+					/* fetch reicht, ein Eintrag bedeutet, dass die While-Schleife durchlaufen wird. */
+					$entry_exists = $stmt->fetch();	
+					$count = 1;
+					while($entry_exists){
+						if($count>9){
+							$uname = substr($uname, 0 , 6).$count;
+						}else{
+							$uname = substr($uname, 0, 7).$count;
+						}
+						$stmt->bindValue(':uname', $uname);
+						$stmt->execute();
+						$entry_exists = $stmt->fetch();
+						$count++;
+					}
+					return $uname;
 				}
-				return $uname;
+				
 			} catch (PDOException $e) {
 				echo $e->getMessage();
 			} finally {

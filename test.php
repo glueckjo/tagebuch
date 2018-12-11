@@ -1,7 +1,7 @@
 <?php 
 	require_once 'user.php';
 	require_once 'entry.php';
-	//include_once 'lib_inc_db.php';
+	include_once 'lib_inc_db.php';
 	//require_once 'entry_from_db.php';
 
 
@@ -10,9 +10,9 @@
 	$user2 = new User('Super', 'Admin', '2Passwort');
 	$user2->setRole(2);
 	$user2->writeToDB();
-	var_dump($user1->getFname());
+	/*var_dump($user1->getFname());
 	var_dump($user1->getUname());
-	var_dump($user1->getLname());
+	var_dump($user1->getLname());*/
 	//var_dump($user1->getPWordTestingOnly());
 	$user1->writeToDB();
 
@@ -21,7 +21,7 @@
 	$entry1->writeDB('tagebuch');
 
 
-	$entry2 = new Entry(Entry::readFromDB(9));
+	$entry2 = new Entry(Entry::readFromDB(4));
 	var_dump($entry2->getContent());
 	var_dump($entry2->getEntryID());
 	var_dump($entry2->getUserName());
