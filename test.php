@@ -21,7 +21,7 @@
 	$entry1->writeDB('tagebuch');
 
 
-	$entry2 = new Entry(Entry::readFromDB(4));
+	$entry2 = new Entry(Entry::readFromDB(1));
 	var_dump($entry2->getContent());
 	var_dump($entry2->getEntryID());
 	var_dump($entry2->getUserName());
