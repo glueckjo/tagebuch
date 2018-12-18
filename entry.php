@@ -3,7 +3,7 @@
 
 	class Entry{
 
-		//bla
+		//bla bla
 		protected $entryID;
 		protected $content = "";
 		protected $userName = "";
