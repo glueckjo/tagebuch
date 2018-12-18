@@ -24,21 +24,7 @@
 			$this->lname = $lname;
 
 			
-			// $umlaut = array('Ä', 'Ö', 'Ü', 'ä', 'ö', 'ü', 'ß');
-			// $ersatz = array('Ae', 'Oe', 'Ue', 'ae', 'oe', 'ue', 'ss');
-			// $lname = str_replace($umlaut, $ersatz, $lname);
-			// $fname = str_replace($umlaut, $ersatz, $fname);
-
-			// /*Erste 6 Buchstaben des Nachnamens und die ersten 2 des Vornamens konkatenieren
-			// Falls Name(n) zu kurz: ganze(n) Namen konkatenieren*/
-			// if (!$unameL = substr($lname, 0, 6)){
-			// 	$unameL = $lname;
-			// }
-			// if(!$unameF = substr($fname, 0, 2)){
-			// 	$unameF = $fname;
-			// }
-
-			// $this->uname = strtolower($unameL.$unameF);
+			
 			
 		}
 
@@ -97,29 +83,55 @@
 
 		private function checkUname(string $uname){
 			try {
-				$db = new PDO('mysql:host=localhost;dbname=tagebuch', 'root', '');
-				$query = 'SELECT uname FROM tbl_user WHERE uname = :uname';
-				$stmt = $db->prepare($query);
-				$stmt->bindValue(':uname', $uname);
-				$stmt->execute();
-
-				/* fetch reicht, ein Eintrag bedeutet, dass die While-Schleife durchlaufen wird. */
-				$entry_exists = $stmt->fetch();	
-				$count = 1;
-				while($entry_exists){
-					if($count>9){
-						$uname = substr($uname, 0 , 6).$count;
-					}else{
-						$uname = substr($uname, 0, 7).$count;
-					}
+				$db = connectDB('tagebuch');
+				if($db){
+					$query = 'SELECT uname FROM tbl_user WHERE uname = :uname';
+					$stmt = $db->prepare($query);
 					$stmt->bindValue(':uname', $uname);
 					$stmt->execute();
-					$entry_exists = $stmt->fetch();
-					$count++;
+
+					/* fetch reicht, ein Eintrag bedeutet, dass die While-Schleife durchlaufen wird. */
+					$entry_exists = $stmt->fetch();	
+					$count = 1;
+					while($entry_exists){
+						if($count>9){
+							$uname = substr($uname, 0 , 6).$count;
+						}else{
+							$uname = substr($uname, 0, 7).$count;
+						}
+						$stmt->bindValue(':uname', $uname);
+						$stmt->execute();
+						$entry_exists = $stmt->fetch();
+						$count++;
+					}
+					return $uname;
 				}
-				return $uname;
+				
 			} catch (PDOException $e) {
-				die('DB-Error: '.$e->getMessage());
+				echo $e->getMessage();
+			} finally {
+				$db = null;
+				$stmt = null;
+			}
+		}
+
+		public function writeToDB(){
+			try {
+				$db = connectDB('tagebuch');
+				$sql = 'INSERT INTO tbl_user (uname, fname, lname, pword, role) VALUES (:uname, :fname, :lname, :pword, :role)';
+				$stmt = $db->prepare($sql);
+				$stmt->bindValue(':uname', $this->uname);
+				$stmt->bindValue(':fname', $this->fname);
+				$stmt->bindValue(':lname', $this->lname);
+				$stmt->bindValue(':pword', $this->pword);
+				$stmt->bindValue(':role', $this->role);
+				$stmt->execute();
+
+			} catch (PDOException $e) {
+				echo $e->getMessage();
+			} finally {
+				$db = null;
+				$stmt = null;
 			}
 		}
 
