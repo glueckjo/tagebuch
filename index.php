@@ -8,57 +8,121 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript">
 	
-    // run the currently selected effect
-    function runEffect() {
-      // get effect type from
-      var selectedEffect = $( "#effectTypes" ).val();
- 
-      // Most effect types need no options passed by default
-      var options = {};
-      // some effects have required parameters
-      if ( selectedEffect === "scale" ) {
-        options = { percent: 50 };
-      } else if ( selectedEffect === "size" ) {
-        options = { to: { width: 200, height: 60 } };
-      }
- 
-      // Run the effect
-      $( "#effect" ).toggle( selectedEffect, options, 500 );
-	  $("button").toggle();
-    };
- 
-    // Set effect from select menu value
-    /*$( "button" ).on( "click", function() {
-      runEffect();
-    });*/
-	//});
+	    // run the currently selected effect
+	    function runEffect() {
+	      // get effect type from
+	      var selectedEffect = $( "#effectTypes" ).val();
+	 
+	      // Most effect types need no options passed by default
+	      var options = {};
+	      // some effects have required parameters
+	      if ( selectedEffect === "scale" ) {
+	        options = { percent: 50 };
+	      } else if ( selectedEffect === "size" ) {
+	        options = { to: { width: 200, height: 60 } };
+	      }
+	 
+	      // Run the effect
+	      $( "#effect" ).toggle( selectedEffect, options, 500 );
+		  $("#effectBtn").toggle();
+	    };
+	 
+	    // Set effect from select menu value
+	    /*$( "button" ).on( "click", function() {
+	      runEffect();
+	    });*/
+		//});
+
+
+		//	TODO:
+		//		* Funktion um login-Status beim Laden der Seite zu prüfen und entsprechende Buttons, Überschriften etc. anzupassen
+		//		* toggle effect 
+		//		* sinnvolle Inhalte im effect-div bei eingeloggtem User
+		//		* Vor Login: Willkommen, nach Logout: auf Wiedersehen, nach Login: Eigene Einträge, Such-/Filter-Elemente
+		//		* register.php fertigschreiben
+
+		function login(oFormElement) {
+			//var uname = document.getElementById('uname').value;
+			//var passwd = document.getElementById('passwd').value;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function(){
+				if (this.readyState == 4 && this.status == 200) {
+					//document.reload();
+					document.getElementById('title').innerHTML += this.responseText;
+				}
+			};
+			xhttp.open(oFormElement.method, oFormElement.action, true);
+			//xhttp.setRequestHeader("Content-type", "apllication/x-www-form-urlencoded");
+			xhttp.send(new FormData(oFormElement));
+			return false;
+		}
+
+		function showRegistration(){
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200){
+
+					document.getElementById('effect').innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("GET", "register.php", true);
+			xhttp.send();
+		}
+		function logout(){
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200){
+					//alert('Logout erfolgreich');
+					//$( "#effect" ).toggle();
+					location.reload();
+				}	
+			};
+			xhttp.open("GET", "logout.php", true);
+			xhttp.send();
+
+		}
+		
 	</script>
 	
 	</head>
 <body>
 	<div id="wrap">
 		<div class="row">
-			<div class="flex3"><h1>Digitales Tagebuch</h1></div>
-			<div id="effect" >
-				<form action="#" method="POST" >
-					<table>
-						<tr>
-						<td><label for="uname">Username:</label></td>
-						<td><input type="text" for="uname"/></td>
-						</tr>
-						<tr>
-						<td><label for="passwd">Password:</label></td>
-						<td><input type="password" for="passwd"/></td>
-						</tr>
-						<tr>
-						<td></td>
-							<td><input type="button" value="Anmelden" /></td>
-						</tr>
-					</table>
-				</form>
-			</div>
-			<button onclick="runEffect()">Login</button>
+			<div class="flex3" ><h1 id="title">Digitales Tagebuch</h1></div>
+			
+				<div id="effect" >
+					<?php if (!isset($_SESSION['login']) && !isset($_SESSION['user'])): ?>
+					<form action="login.php" method="POST" onsubmit="return login(this);">
+						<table>
+							<tr>
+							<td><label for="uname">Username:</label></td>
+							<td><input type="text" name="uname" id="uname"/></td>
+							</tr>
+							<tr>
+							<td><label for="passwd">Password:</label></td>
+							<td><input type="password" name="passwd" id="passwd"/></td>
+							</tr>
+							<tr>
+							<td></td>
+								<!--<td><input type="button" value="Anmelden" onclick="login()" /></td>-->
+								<td><input type="submit" value="Anmelden"><button onclick="showRegistration()">Registrieren</button></td>
+								<td></td>
+							</tr>
+						</table>
+					</form>
+					<?php else: ?>
+						
+					<?php endif; ?>
+					<button onclick="runEffect()">Verstecken</button>
+				</div>
+				<?php if (!isset($_SESSION['login']) && !isset($_SESSION['user'])): ?>
+					<button id="effectBtn" onclick="runEffect()">Login</button>
+				<?php else: ?>
+					<button onclick="logout()">Abmelden</button>
+				<?php endif; ?>
+			
 				
+			
 		
 		</div>
 		

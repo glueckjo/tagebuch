@@ -1,9 +1,13 @@
 <?php 
+	session_start();
+
 	require_once 'user.php';
 	require_once 'entry.php';
 	include_once 'lib_inc_db.php';
 	//require_once 'entry_from_db.php';
-
+	unset($_SESSION['login']);
+	var_dump($_SESSION);
+	die;
 
 	$user1 = new User('Zweiter', 'Tester', '1Passwort');
 

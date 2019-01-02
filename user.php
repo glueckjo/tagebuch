@@ -10,19 +10,31 @@
 		protected $pword = '';
 		protected $role = 1;
 
-		function __construct(string $fname, string $lname, string $pword)
+		function __construct(array $userArray)
 		{
 			//$this->uname = checkUname(createUname($fname, $lname));
 			//$this->uname = createUname($fname, $lname);
 			//$this->uname = $lname.$fname;
-			$this->uname = $this->checkUname($this->createUname($fname, $lname));
+			if(!isset($userArray['uname'])){
+				$this->uname = $this->checkUname($this->createUname($fname, $lname));
+			}else{
+				$this->uname = $userArray['uname'];
+			}
+			if(isset($userArray['passwd'])){
+				$this->pword = password_hash($pword, PASSWORD_DEFAULT);
+			}
 
 			// Passwort-Hash in Methode auslagern?
-			$this->pword = password_hash($pword, PASSWORD_DEFAULT);
+			
 
-			$this->fname = $fname;
-			$this->lname = $lname;
+			$this->fname = $userArray['fname'];
+			$this->lname = $userArray['lname'];
 
+			if(isset($userArray['role'])){
+				$this->role = $userArray['role'];
+			}else{
+				$this->role = $role;
+			}
 			
 			
 			
@@ -132,6 +144,45 @@
 			} finally {
 				$db = null;
 				$stmt = null;
+			}
+		}
+
+		public static function checkPassword(string $uname, string $password) {
+			try {
+				$db = connectDB('tagebuch');
+				$sql = 'SELECT pword FROM tbl_user WHERE uname = :uname';
+				$stmt = $db->prepare($sql);
+				$stmt->bindValue(':uname', $uname);
+				$stmt->execute();
+				$pwd_hash = $stmt->fetch(PDO::FETCH_NUM)[0];
+				if(isset($pwd_hash) && password_verify($password, $pwd_hash)){
+					//echo "success";
+					return true;
+				}else{
+					//echo "failure";
+					return false;
+				}
+			}catch(PDOException $e){
+				echo $e->getMessage();
+			}finally{
+				$db = null;
+				$stmt = null;
+			}
+		}
+
+		public static function createFromDB(string $uname){
+			try {
+				$db = connectDB('tagebuch');
+				$sql = 'SELECT uname, fname, lname, role FROM tbl_user WHERE uname = :uname';
+				$stmt = $db->prepare($sql);
+				$stmt->bindValue(':uname', $uname);
+				$stmt->execute();
+				$userArray = $stmt->fetch(PDO::FETCH_ASSOC);
+				$user = new User($userArray);
+				return $user;
+
+			} catch (PDOException $e) {
+				echo $e->getMessage();
 			}
 		}
 
