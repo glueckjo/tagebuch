@@ -16,12 +16,14 @@
 			//$this->uname = createUname($fname, $lname);
 			//$this->uname = $lname.$fname;
 			if(!isset($userArray['uname'])){
-				$this->uname = $this->checkUname($this->createUname($fname, $lname));
+				$this->uname = $this->checkUname($this->createUname($userArray['fname'], $userArray['lname']));
 			}else{
 				$this->uname = $userArray['uname'];
 			}
 			if(isset($userArray['passwd'])){
-				$this->pword = password_hash($pword, PASSWORD_DEFAULT);
+				$this->pword = password_hash($userArray['passwd'], PASSWORD_DEFAULT);
+			}elseif (isset($userArray['pword'])) {
+				$this->pword = $userArray['pword'];
 			}
 
 			// Passwort-Hash in Methode auslagern?
@@ -33,7 +35,7 @@
 			if(isset($userArray['role'])){
 				$this->role = $userArray['role'];
 			}else{
-				$this->role = $role;
+				$this->role = 1;
 			}
 			
 			
@@ -63,6 +65,17 @@
 
 		public function setRole(int $role){
 			$this->role = $role;
+		}
+
+		public function toArray() {
+			$array =  [
+				'fname'	=>	$this->fname,
+				'lname'	=>	$this->lname,
+				'uname'	=>	$this->uname,
+				'role'	=>	$this->role,
+				'passwd'=>	$this->pword
+			];
+			return $array;
 		}
 
 
@@ -130,7 +143,18 @@
 		public function writeToDB(){
 			try {
 				$db = connectDB('tagebuch');
-				$sql = 'INSERT INTO tbl_user (uname, fname, lname, pword, role) VALUES (:uname, :fname, :lname, :pword, :role)';
+
+				$sql_i = 'INSERT INTO tbl_user (uname, fname, lname, pword, role) VALUES (:uname, :fname, :lname, :pword, :role)';
+				$sql_u = 'UPDATE tbl_user SET role = :role WHERE uname = :uname';
+				$sql_q = 'SELECT * FROM tbl_user WHERE uname = :uname';
+				$stmt = $db->prepare($sql_q);
+				$stmt->bindValue(':uname', $this->uname);
+				$stmt->execute();
+				if ($stmt->fetch()){
+					$sql = $sql_u;
+				}else {
+					$sql = $sql_i;
+				}
 				$stmt = $db->prepare($sql);
 				$stmt->bindValue(':uname', $this->uname);
 				$stmt->bindValue(':fname', $this->fname);
@@ -173,13 +197,14 @@
 		public static function createFromDB(string $uname){
 			try {
 				$db = connectDB('tagebuch');
-				$sql = 'SELECT uname, fname, lname, role FROM tbl_user WHERE uname = :uname';
+				$sql = 'SELECT uname, fname, lname, role , pword FROM tbl_user WHERE uname = :uname';
 				$stmt = $db->prepare($sql);
 				$stmt->bindValue(':uname', $uname);
 				$stmt->execute();
-				$userArray = $stmt->fetch(PDO::FETCH_ASSOC);
+				$userArray = (array) $stmt->fetch(PDO::FETCH_ASSOC);
 				$user = new User($userArray);
 				return $user;
+				//return $userArray;
 
 			} catch (PDOException $e) {
 				echo $e->getMessage();

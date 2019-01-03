@@ -7,7 +7,20 @@
 	<link rel="stylesheet" href="css/CSS.css" />
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript">
-	
+
+		function showLogin() {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200){
+					document.getElementById('effect').style.display = 'block';
+					document.getElementById('effect').innerHTML = this.responseText;
+					document.getElementById('effectBtn').style.display = 'none';
+					//document.getElementById('logoutBtn').style.display = 'block';
+				}
+			};
+			xhttp.open("GET", "loginform.php", true);
+			xhttp.send();
+		}	
 	    // run the currently selected effect
 	    function runEffect() {
 	      // get effect type from
@@ -25,6 +38,7 @@
 	      // Run the effect
 	      $( "#effect" ).toggle( selectedEffect, options, 500 );
 		  $("#effectBtn").toggle();
+		  showLogin();
 	    };
 	 
 	    // Set effect from select menu value
@@ -49,6 +63,8 @@
 				if (this.readyState == 4 && this.status == 200) {
 					//document.reload();
 					document.getElementById('title').innerHTML += this.responseText;
+					document.getElementById('effect').style.display = 'none';
+					document.getElementById('logoutBtn').style.display = 'block';
 				}
 			};
 			xhttp.open(oFormElement.method, oFormElement.action, true);
@@ -61,37 +77,99 @@
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200){
-
+					document.getElementById('effect').style.display = 'block';
 					document.getElementById('effect').innerHTML = this.responseText;
+					document.getElementById('effectBtn').style.display = 'none';
+					//document.getElementById('logoutBtn').style.display = 'block';
 				}
 			};
 			xhttp.open("GET", "register.php", true);
 			xhttp.send();
 		}
+
+		function registerUser(oFormElement) {
+			var xhttp = new XMLHttpRequest();
+
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					//var user = this.responseText;
+					var user = JSON.parse(this.response);
+					//alert(user);
+					document.getElementById('title').innerHTML += ' - ' + user['uname'];
+					document.getElementById('effect').style.display = 'none';
+					document.getElementById('logoutBtn').style.display = 'block';
+				}
+			};
+
+			xhttp.open(oFormElement.method, oFormElement.action, true);
+			//xhttp.setRequestHeader('Content-type', 'multipart/form-data');
+			xhttp.send(new FormData(oFormElement));
+			return false;
+		}
+
 		function logout(){
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200){
 					//alert('Logout erfolgreich');
 					//$( "#effect" ).toggle();
-					location.reload();
+					//location.reload();
+					document.getElementById('logoutBtn').style.display = 'none';
+					document.getElementById('title').innerHTML = 'Digitales Tagebuch';
+					document.getElementById('effect').style.display = 'none';
+					document.getElementById('effectBtn').style.display = 'block';
+					
+
 				}	
 			};
 			xhttp.open("GET", "logout.php", true);
 			xhttp.send();
 
 		}
+
+		function checkCookie(cname){
+			var name = cname + '=';
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for (var i = 0; i < ca.length; i++){
+				var c = ca[i];
+				while (c.charAt(0) == ' '){
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return '';
+		}
+
+		function checkLogin(){
+			/*document.getElementById('logoutBtn').style.display = 'none';
+			document.getElementById('effectBtn').style.display = 'none';
+			document.getElementById('effect').style.display = 'none';*/
+			if(checkCookie('login') == 'ok'){
+				document.getElementById('title').innerHTML += ' - ' + checkCookie('uname');
+				document.getElementById('effect').style.display = 'none';
+				document.getElementById('effectBtn').style.display = 'none';
+				document.getElementById('logoutBtn').style.display = 'block';
+
+			}else{
+				document.getElementById('effectBtn').style.display = 'block';
+				document.getElementById('logoutBtn').style.display = 'none';
+
+			}
+		}
 		
 	</script>
 	
 	</head>
-<body>
+<body onload="checkLogin()">
 	<div id="wrap">
 		<div class="row">
 			<div class="flex3" ><h1 id="title">Digitales Tagebuch</h1></div>
 			
 				<div id="effect" >
-					<?php if (!isset($_SESSION['login']) && !isset($_SESSION['user'])): ?>
+					
 					<form action="login.php" method="POST" onsubmit="return login(this);">
 						<table>
 							<tr>
@@ -105,21 +183,21 @@
 							<tr>
 							<td></td>
 								<!--<td><input type="button" value="Anmelden" onclick="login()" /></td>-->
-								<td><input type="submit" value="Anmelden"><button onclick="showRegistration()">Registrieren</button></td>
+								<td><input type="submit" value="Anmelden"></td>
 								<td></td>
 							</tr>
 						</table>
 					</form>
-					<?php else: ?>
+					
 						
-					<?php endif; ?>
-					<button onclick="runEffect()">Verstecken</button>
+					<button onclick="showRegistration()">Registrieren</button>
+					<!--<button onclick="runEffect()">Verstecken</button>-->
 				</div>
-				<?php if (!isset($_SESSION['login']) && !isset($_SESSION['user'])): ?>
-					<button id="effectBtn" onclick="runEffect()">Login</button>
-				<?php else: ?>
-					<button onclick="logout()">Abmelden</button>
-				<?php endif; ?>
+				
+					<button id="effectBtn" onclick="runEffect()" display="none">Login</button>
+				
+					<button id="logoutBtn" onclick="logout()" display="none">Abmelden</button>
+				
 			
 				
 			

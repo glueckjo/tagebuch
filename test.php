@@ -5,8 +5,10 @@
 	require_once 'entry.php';
 	include_once 'lib_inc_db.php';
 	//require_once 'entry_from_db.php';
-	unset($_SESSION['login']);
+	//unset($_SESSION['login']);
 	var_dump($_SESSION);
+	var_dump($_POST);
+	var_dump($_COOKIE);
 	die;
 
 	$user1 = new User('Zweiter', 'Tester', '1Passwort');

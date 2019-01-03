@@ -39,6 +39,9 @@ p{
 	margin-right:20%;
 	font-size: 1.5em;
 }
-#effect{
+#effect, #effectBtn, #logoutBtn{
 	display:none;
 }
+
+
+
