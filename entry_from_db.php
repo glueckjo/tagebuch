@@ -3,12 +3,13 @@
 	/**
 	 * Einträge, die aus der DB gelesen wurden
 	 */
+	require_once 'entry.php';
 	class EntryFromDB extends Entry
 	{
 		
-		function __construct()
+		function __construct(int $entry_ID)
 		{
-			$entryArray = $this->readFromDB();
+			$entryArray = Entry::readFromDB($entry_ID);
 			$this->entryID = $entryArray['entry_ID'];
 			$this->content = $entryArray['content'];
 			$this->entryPublic = $entryArray['entryPublic'];

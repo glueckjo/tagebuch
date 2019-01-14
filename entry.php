@@ -19,9 +19,20 @@
 			}
 
 			$this->content = $entryArray['content'];
+			
 			$this->userName = $entryArray['uname'];
-			$this->visible = $entryArray['entryVisible'];
-			$this->entryPublic = $entryArray['entryPublic'];
+			if (isset($entryArray['entryVisible'])) {
+				$this->visible = $entryArray['entryVisible'];
+			}else{
+				$this->visible = $visible;
+			}
+			if (isset($entryArray['entryPublic'])){
+				$this->entryPublic = $entryArray['entryPublic'];
+			}else{
+				$this->entryPublic = $entryPublic;
+			}
+			
+			
 		}
 
 		/* Erzeugen eines Entry-Objektes aus der DB: in PHP gibt es kein Überladen von Funktionen / Methoden, da müssen wir uns noch was überlegen (eigene entryFromDB Klasse?)

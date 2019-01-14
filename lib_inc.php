@@ -18,6 +18,9 @@
 		setcookie('uname', $value['uname']);
 		setcookie('role', $value['role']);
 		setcookie('login', 'ok');
+		if (isset($_COOKIE['logout'])){
+			setcookie('logout', '', time() - 60);
+		}
 	}
 
 ?>

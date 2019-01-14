@@ -9,6 +9,7 @@
 		}
 	}
 	unset($_SESSION);
+	setcookie('logout', 'yes');
 
 	session_destroy();
 	

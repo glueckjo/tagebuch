@@ -53,7 +53,7 @@
 		//		* toggle effect 
 		//		* sinnvolle Inhalte im effect-div bei eingeloggtem User
 		//		* Vor Login: Willkommen, nach Logout: auf Wiedersehen, nach Login: Eigene Einträge, Such-/Filter-Elemente
-		//		* register.php fertigschreiben
+		//		
 
 		function login(oFormElement) {
 			//var uname = document.getElementById('uname').value;
@@ -65,6 +65,7 @@
 					document.getElementById('title').innerHTML += this.responseText;
 					document.getElementById('effect').style.display = 'none';
 					document.getElementById('logoutBtn').style.display = 'block';
+					loadContent('entries');
 				}
 			};
 			xhttp.open(oFormElement.method, oFormElement.action, true);
@@ -98,6 +99,7 @@
 					document.getElementById('title').innerHTML += ' - ' + user['uname'];
 					document.getElementById('effect').style.display = 'none';
 					document.getElementById('logoutBtn').style.display = 'block';
+					loadContent('entries');
 				}
 			};
 
@@ -118,6 +120,7 @@
 					document.getElementById('title').innerHTML = 'Digitales Tagebuch';
 					document.getElementById('effect').style.display = 'none';
 					document.getElementById('effectBtn').style.display = 'block';
+					loadContent('goodbye');
 					
 
 				}	
@@ -152,14 +155,38 @@
 				document.getElementById('effect').style.display = 'none';
 				document.getElementById('effectBtn').style.display = 'none';
 				document.getElementById('logoutBtn').style.display = 'block';
+				loadContent('entries');
 
 			}else{
 				document.getElementById('effectBtn').style.display = 'block';
 				document.getElementById('logoutBtn').style.display = 'none';
+				if(checkCookie('logout') == 'yes'){
+					loadContent('goodbye');
+				}else{
+					loadContent('welcome');
+				}
 
 			}
 		}
-		
+
+		function loadContent (typeOfContent) {
+			var file = typeOfContent + '.php';
+			console.log(file);
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200){
+					document.getElementById('content').innerHTML = this.responseText;
+				}
+			}
+			xhttp.open('GET', file, true);
+			xhttp.send();
+		}
+		function saveEntry () {
+			var entryContent = document.getElementById('entryContent').value;
+			//console.log(entryContent);
+			var entryUser = checkCookie('uname');
+			console.log(entryUser);
+		}
 	</script>
 	
 	</head>
@@ -204,26 +231,10 @@
 		
 		</div>
 		
-		<div>
-		<h2>Willkommen</h2>
-			<p>
-				Lorem ipsum dolor sit amet, ea delenit utroque quo, audiam denique pri eu. Pro homero alterum no, qui amet assentior an, duo solum tation decore ea. Possim dolorum comprehensam no sea. Cum vitae iriure ut, consul referrentur in nec.
-				Cu quidam impedit nec, tritani corrumpit scriptorem ne pro, quot augue regione no sit. Nullam aliquid graecis ne per. Eam placerat conclusionemque id. Vix id brute dictas forensibus. Sonet delenit duo ex, vocent complectitur sed ad. An odio saperet vel.
-				Quis sonet argumentum an nam. Quem assentior intellegebat per id, nec no tota ubique ancillae. Cu tempor ridens copiosae mea. Mel detracto maiestatis no, falli error an vim. Ut pri ignota epicuri interpretaris, assum maiorum aliquando no nam. Ut movet dolorum minimum has.
-				Pro in fugit offendit voluptatibus. Utamur persius indoctum te nam. Pri porro assentior temporibus ut, cetero aperiam partiendo et eam. Ut vim idque fuisset.
-				Copiosae sadipscing vel at, vel dissentiunt accommodare at, vim elit modus animal et. Sed mucius electram ei, et sed diam offendit. Mei odio reprimique necessitatibus eu, vix et utamur ancillae facilisis, cu dolores dissentias vel. Fastidii theophrastus an quo, splendide rationibus no per. Vim dicat molestiae assentior ei, cum et laudem postulant. Per ad natum doctus deseruisse.
-			</p>
+		<div id="content">
+			
 		</div>
-		<div>
-			<h2>Auf Wiedersehen</h2>
-			<p>
-				Lorem ipsum dolor sit amet, ea delenit utroque quo, audiam denique pri eu. Pro homero alterum no, qui amet assentior an, duo solum tation decore ea. Possim dolorum comprehensam no sea. Cum vitae iriure ut, consul referrentur in nec.
-				Cu quidam impedit nec, tritani corrumpit scriptorem ne pro, quot augue regione no sit. Nullam aliquid graecis ne per. Eam placerat conclusionemque id. Vix id brute dictas forensibus. Sonet delenit duo ex, vocent complectitur sed ad. An odio saperet vel.
-				Quis sonet argumentum an nam. Quem assentior intellegebat per id, nec no tota ubique ancillae. Cu tempor ridens copiosae mea. Mel detracto maiestatis no, falli error an vim. Ut pri ignota epicuri interpretaris, assum maiorum aliquando no nam. Ut movet dolorum minimum has.
-				Pro in fugit offendit voluptatibus. Utamur persius indoctum te nam. Pri porro assentior temporibus ut, cetero aperiam partiendo et eam. Ut vim idque fuisset.
-				Copiosae sadipscing vel at, vel dissentiunt accommodare at, vim elit modus animal et. Sed mucius electram ei, et sed diam offendit. Mei odio reprimique necessitatibus eu, vix et utamur ancillae facilisis, cu dolores dissentias vel. Fastidii theophrastus an quo, splendide rationibus no per. Vim dicat molestiae assentior ei, cum et laudem postulant. Per ad natum doctus deseruisse.
-			</p>
-		</div>
+		
 	</div>
 </body>
 </html>
