@@ -1,5 +1,6 @@
 body {
   background-image: url("../bilder/backgroundbuch.jpg");
+  font-family: sans-serif;
 }
 #wrapper {
 	display: flex;
@@ -43,5 +44,27 @@ p{
 	display:none;
 }
 
+.entryComplete{
+	display: flex;
+	flex-direction: row;
+	margin-top: 2em;
+	margin-bottom: 2em;
+	width: 80%;
+	margin-left:5%;
 
+}
 
+.userDetails{
+	flex: 1;
+	background: lightgrey;
+	font-size: 0.8em;
+}
+.entryContent{
+	flex: 5;
+	background: white;
+}
+.entryContent>p{
+	margin-left: 5%;
+	font-size: 1em;
+	margin-right: 10%;
+}

@@ -152,6 +152,7 @@
 			document.getElementById('effect').style.display = 'none';*/
 			if(checkCookie('login') == 'ok'){
 				document.getElementById('title').innerHTML += ' - ' + checkCookie('uname');
+				document.title = checkCookie('fname') + ' ' + checkCookie('lname');
 				document.getElementById('effect').style.display = 'none';
 				document.getElementById('effectBtn').style.display = 'none';
 				document.getElementById('logoutBtn').style.display = 'block';
@@ -171,7 +172,7 @@
 
 		function loadContent (typeOfContent) {
 			var file = typeOfContent + '.php';
-			console.log(file);
+			//console.log(file);
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200){
@@ -185,7 +186,14 @@
 			var entryContent = document.getElementById('entryContent').value;
 			//console.log(entryContent);
 			var entryUser = checkCookie('uname');
-			console.log(entryUser);
+			//console.log(entryUser);
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				loadContent('entries');
+			}
+			xhttp.open('POST', 'entries.php', true);
+			xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhttp.send('uname='+ entryUser + '&content='+entryContent);
 		}
 	</script>
 	

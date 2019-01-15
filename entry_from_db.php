@@ -24,11 +24,12 @@
 			*/
 		}
 		
-		private function readFromDB(){
+		/*private function readFromDB(int $entry_ID){
 			//var_dump($db = connectDB('tagebuch'));
 			if($db = connectDB('tagebuch')){
 				try {
-					$stmt = $db->prepare('SELECT * FROM tbl_entry');
+					$stmt = $db->prepare('SELECT * FROM tbl_entry WHERE entry_ID = :entry_ID');
+					$stmt->bindValue(':entry_ID', $entry_ID);
 					$stmt->execute();
 					return $entryArray = $stmt->fetch(PDO::FETCH_ASSOC);
 				} catch (PDOException $e) {
@@ -37,7 +38,7 @@
 				
 
 			}
-		}
+		}*/
 
 
 	}

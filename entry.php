@@ -24,12 +24,12 @@
 			if (isset($entryArray['entryVisible'])) {
 				$this->visible = $entryArray['entryVisible'];
 			}else{
-				$this->visible = $visible;
+				$this->visible = true;
 			}
 			if (isset($entryArray['entryPublic'])){
 				$this->entryPublic = $entryArray['entryPublic'];
 			}else{
-				$this->entryPublic = $entryPublic;
+				$this->entryPublic = false;
 			}
 			
 			
@@ -114,6 +114,9 @@
 
 				} catch (PDOException $e) {
 					echo $e->getMessage();
+				} finally {
+					$db = null;
+					$stmt = null;
 				}
 
 				
