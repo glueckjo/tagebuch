@@ -1,0 +1,10 @@
+array(4) {
+  ["uname"]=>
+  string(8) "glueckjo"
+  ["content"]=>
+  string(20) "Mein zweiter eintrag"
+  ["entryVisible"]=>
+  string(1) "1"
+  ["entryPublic"]=>
+  string(1) "0"
+}

@@ -8,6 +8,26 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript">
 
+		function checkBesucherCookie(){
+			var a = new Date();
+			a = new Date(a.getTime() +1000*60*60*24*365)
+			if(checkCookie("cookieBesucht") == ""){
+				$( "#cookie" ).click(function() {
+ 					if ( $( "div:first" ).is( ":hidden" ) ) {
+  						$( "#cookie" ).show( "slow" );
+  					} else {
+    					$( "#cookie" ).slideUp();
+    					document.cookie = 'cookieBesucht=1; expires='+a.toGMTString()+';';
+  					}
+				});	
+			}else{
+				$("#cookie").hide();
+				document.cookie = 'cookieBesucht=1; expires='+a.toGMTString()+';';
+				 
+			}	
+		}
+	
+	
 		function showLogin() {
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
@@ -24,19 +44,19 @@
 	    // run the currently selected effect
 	    function runEffect() {
 	      // get effect type from
-	      var selectedEffect = $( "#effectTypes" ).val();
+	     // var selectedEffect = '';
 	 
 	      // Most effect types need no options passed by default
-	      var options = {};
+	      //var options = {};
 	      // some effects have required parameters
-	      if ( selectedEffect === "scale" ) {
+	     /* if ( selectedEffect === "scale" ) {
 	        options = { percent: 50 };
 	      } else if ( selectedEffect === "size" ) {
 	        options = { to: { width: 200, height: 60 } };
 	      }
-	 
+	 */
 	      // Run the effect
-	      $( "#effect" ).toggle( selectedEffect, options, 500 );
+	      $( "#effect" ).toggle( 'fast' );
 		  $("#effectBtn").toggle();
 		  showLogin();
 	    };
@@ -121,8 +141,6 @@
 					document.getElementById('effect').style.display = 'none';
 					document.getElementById('effectBtn').style.display = 'block';
 					loadContent('goodbye');
-					
-
 				}	
 			};
 			xhttp.open("GET", "logout.php", true);
@@ -150,6 +168,7 @@
 			/*document.getElementById('logoutBtn').style.display = 'none';
 			document.getElementById('effectBtn').style.display = 'none';
 			document.getElementById('effect').style.display = 'none';*/
+			
 			if(checkCookie('login') == 'ok'){
 				document.getElementById('title').innerHTML += ' - ' + checkCookie('uname');
 				document.title = checkCookie('fname') + ' ' + checkCookie('lname');
@@ -168,6 +187,7 @@
 				}
 
 			}
+			checkBesucherCookie();
 		}
 
 		function loadContent (typeOfContent) {
@@ -178,7 +198,7 @@
 				if (this.readyState == 4 && this.status == 200){
 					document.getElementById('content').innerHTML = this.responseText;
 				}
-			}
+			};
 			xhttp.open('GET', file, true);
 			xhttp.send();
 		}
@@ -188,20 +208,93 @@
 			var entryUser = checkCookie('uname');
 			//console.log(entryUser);
 			var xhttp = new XMLHttpRequest();
+			if(document.getElementById('entryVisible').checked){
+				var entryVisible = 1;
+			}else{
+				var entryVisible = 0;
+			}
+			if(document.getElementById('entryPublic').checked){
+				var entryPublic = 1;
+			}else{
+				var entryPublic = 0;
+			}
 			xhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200){
 					loadContent('entries');
 				}
 				
 			};
-			xhttp.open('POST', 'entries.php', false);
+			xhttp.open('POST', 'entries.php', true);
 			xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			xhttp.send('uname='+ entryUser + '&content='+entryContent);
+			xhttp.send('uname='+ entryUser + '&content='+ entryContent + '&entryVisible=' + entryVisible + '&entryPublic=' + entryPublic);
+			
+		}
+		function selUserEntries(str){
+			//alert(str);
+			var query = 'entries.php?seluname=' + str;
+			//alert(query);
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200){
+					document.getElementById('content').innerHTML = this.responseText;
+				}	
+			};
+			xhttp.open('GET', query, true);
+			xhttp.send();
+
+			return false;
+		}
+		function newEntryShow () {
+			$('#newEntryDiv').toggle();
+			$('#newEntryBtn').hide();
+		}
+		function editEntry (entry_ID) {
+			var query = 'editEntry.php?entry_ID=' + entry_ID;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200){
+					document.getElementById(entry_ID).innerHTML = this.responseText;
+					document.getElementById(entry_ID).removeAttribute('onclick');
+					document.getElementById(entry_ID).class = 'entryEditor'; 
+					var ents = document.getElementsByClassName('entryComplete');
+					for (var i = ents.length - 1; i >= 0; i--) {
+						ents[i].removeAttribute('onclick');
+					}
+				}
+			};
+			xhttp.open('GET', query, true);
+			xhttp.send();
+		}
+		function changeEntry (entry_ID) {
+			//alert(entry_ID);
+			var content = document.getElementById('changeContent').value;
+			//alert(content);
+			var user = checkCookie('uname');
+			if(document.getElementById('changeVisible').checked){
+				var entryVisible = 1;
+			}else{
+				var entryVisible = 0;
+			}
+			if(document.getElementById('changePublic').checked){
+				var entryPublic = 1;
+			}else{
+				var entryPublic = 0;
+			}
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if(this.readyState == 4 && this.status == 200){
+					loadContent('entries');
+				}
+			};
+			xhttp.open('POST', 'editEntry.php', true);
+			xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhttp.send('uname='+ user + '&content='+ content + '&entryVisible=' + entryVisible + '&entryPublic=' + entryPublic + '&entry_ID=' + entry_ID);
 		}
 	</script>
 	
 	</head>
 <body onload="checkLogin()">
+	<div id="cookie">Diese Website verwendet Cookies. Mit der Nutzung dieser Seite stimmst du unserer Verwendung von Cookies zu.</div>
 	<div id="wrap">
 		<div class="row">
 			<div class="flex3" ><h1 id="title">Digitales Tagebuch</h1></div>

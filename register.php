@@ -3,7 +3,9 @@
 	if(!isset($_SESSION['login'])){
 
 ?>
+
 <script type="text/javascript"></script>
+
 <form method="POST" action="enterUser.php" onsubmit="return registerUser(this);">
 	<table>
 		<tr>
@@ -28,7 +30,8 @@
 
 </form>
 <!--<button onclick="runEffect()">Verstecken</button>-->
-<button onclick="showLogin()">Anmelden</button>
+<label for="Anmelden">Anmelden</label>
+<button class="toggelBtn" onclick="showLogin()">Anmelden</button>
 
 
 

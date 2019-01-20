@@ -16,5 +16,6 @@
 		</tr>
 	</table>
 </form>
-<button onclick="showRegistration()">Registrieren</button>
+<label for="Neues Mitglied">Neu Hier?</label>
+<button class="toggelBtn" onclick="showRegistration()">Registrieren</button>
 <!--<button onclick="runEffect()">Verstecken</button>-->

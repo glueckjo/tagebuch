@@ -1,15 +1,16 @@
 body {
   background-image: url("../bilder/backgroundbuch.jpg");
   font-family: sans-serif;
+  font-size: 1em;
 }
+/*Div*/
 #wrapper {
 	display: flex;
 	flex-direction: column;
 	height: 95%;
 }
-
 div {
-	/*border: 1px solid black;*/
+	
 	flex: 1; 
 }
 .row {
@@ -24,10 +25,78 @@ div {
 .flex2 {
 	flex: 2;
 }
-
 .flex3 {
 	flex: 3;
 }
+.flex5{
+	flex: 6;
+}
+
+
+/*Entry*/
+#entrySaveBtn{
+	font-size: 1.2em;
+	background-color:rgba(0,0,0,0.1);
+	margin-left: 45%;
+}
+#entryContent{
+	margin-left: 18.2%;
+	resize: none;
+	width: 66.3%;
+	height: 100px;
+	display: block;
+}
+#newEntryBtn{
+	font-size: 1.2em;
+	margin-left: 45%;
+	background-color:rgba(0,0,0,0.1);
+}
+
+
+/*Anemelden*/ 
+input[type=submit]{
+	font-size: 1.2em;
+	background-color:rgba(0,0,0,0.1);
+	width: 150px
+
+}
+#effectBtn{
+	font-size: 2em;
+	width: 100px;
+	height: 50px;
+	margin-top: 60px;
+	margin-right: 200px;
+	background-color:rgba(0,0,0,0.1);
+}
+.toggelBtn{
+	font-size: 1.2em;
+	margin-left: 8.5px;
+	width: 150px;
+	background-color:rgba(0,0,0,0.1);
+}
+#logoutBtn{
+	font-size: 2em;
+	width: 200px;
+	height: 50px;
+	margin-top: 60px;
+	margin-right: 200px;
+	background-color:rgba(0,0,0,0.1);
+}
+
+
+
+
+
+/*Cookie*/
+#cookie{
+	font-size: 1.3em;
+	text-align: center;
+	background-color: #756767;
+	color: #f6546a;
+}
+
+
+/*Texte*/
 h1{
 	font-size:4em;
 }
@@ -40,7 +109,12 @@ p{
 	margin-right:20%;
 	font-size: 1.5em;
 }
-#effect, #effectBtn, #logoutBtn{
+
+
+
+
+/*Effect*/
+#effect, #effectBtn, #logoutBtn, #newEntryDiv{
 	display:none;
 }
 
@@ -53,7 +127,6 @@ p{
 	margin-left:5%;
 
 }
-
 .userDetails{
 	flex: 1;
 	background: lightgrey;
@@ -63,8 +136,12 @@ p{
 	flex: 5;
 	background: white;
 }
-.entryContent>p{
-	margin-left: 5%;
+.entryContent{
+	/*padding-left: 1%;
 	font-size: 1em;
-	margin-right: 10%;
+	padding-right: 1%;*/
+	border: 10px solid white;
+}
+#changeContent{
+	width: 50%;
 }

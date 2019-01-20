@@ -53,31 +53,31 @@
 		
 
 		//Visible
-		function setVisible($visible){
+		public function setVisible($visible){
 			$this->visible = $visible;
 		}
 
-		function setEntryPublic($entryPublic){
+		public function setEntryPublic($entryPublic){
 			$this->entryPublic = $entryPublic;
 		}
 
-		function getContent(){
+		public function getContent(){
 			return $this->content;
 		}
 
-		function getEntryID(){
+		public function getEntryID(){
 			return $this->entryID;
 		}
 
-		function getUserName(){
+		public function getUserName(){
 			return $this->userName;
 		}
 
-		function getEntryPublic(){
+		public function getEntryPublic(){
 			return $this->entryPublic;
 		}
 
-		function getVisible(){
+		public function getVisible(){
 			return $this->visible;
 		}
 
@@ -127,6 +127,31 @@
 
 				
 
+			
+		}
+		public function updateDB(){
+			
+			$db = connectDB('tagebuch');
+			try {
+				$stmt = $db->prepare('UPDATE tbl_entry SET uname = :uname, content = :content, entryPublic = :entryPublic, entryVisible = :entryVisible WHERE entry_ID = :entry_ID') ;
+				$stmt->bindValue(':entry_ID', $this->entryID, PDO::PARAM_INT);
+				$stmt->bindValue(':uname', $this->userName);
+				$stmt->bindValue(':content', $this->content);
+				$stmt->bindValue(':entryPublic', $this->entryPublic);
+				$stmt->bindValue(':entryVisible', $this->visible, PDO::PARAM_BOOL);
+				$stmt->execute();
+				$db = null;
+				$stmt = null;
+				//echo $result;
+
+			} catch (PDOException $e) {
+				echo 'DB_ERROR: ' . $e->getMessage();
+			} finally {
+				$db = null;
+				$stmt = null;
+			}
+			
+		
 			
 		}
 	}
