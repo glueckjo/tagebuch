@@ -1,5 +1,6 @@
 <?php
 	require_once 'lib_inc_db.php';
+	require_once 'lib_inc.php';
 
 	class Entry{
 
@@ -21,15 +22,16 @@
 			$this->content = $entryArray['content'];
 			
 			$this->userName = $entryArray['uname'];
+			$this->visible = true;
+			$this->entryPublic = false;
+			
 			if (isset($entryArray['entryVisible'])) {
 				$this->visible = $entryArray['entryVisible'];
-			}else{
-				$this->visible = true;
 			}
+
 			if (isset($entryArray['entryPublic'])){
+
 				$this->entryPublic = $entryArray['entryPublic'];
-			}else{
-				$this->entryPublic = false;
 			}
 			
 			
@@ -81,22 +83,26 @@
 
 		public function writeDB(){
 			
-			if($db = connectDB('tagebuch')){
-				try {
-					$stmt = $db->prepare('INSERT INTO tbl_entry (uname, content, entryPublic, entryVisible) VALUES (:uname, :content, :entryPublic, :entryVisible)');
-					$stmt->bindValue(':uname', $this->userName);
-					$stmt->bindValue(':content', $this->content);
-					$stmt->bindValue(':entryPublic', $this->entryPublic);
-					$stmt->bindValue(':entryVisible', $this->visible);
-					$stmt->execute();
-				} catch (PDOException $e) {
-					echo 'DB_ERROR: ' . $e->getMessage();
-				} finally {
-					$db = null;
-					$stmt = null;
-				}
-				
+			$db = connectDB('tagebuch');
+			try {
+				$stmt = $db->prepare('INSERT INTO tbl_entry (uname, content, entryPublic, entryVisible) VALUES (:uname, :content, :entryPublic, :entryVisible)');
+				$stmt->bindValue(':uname', $this->userName);
+				$stmt->bindValue(':content', $this->content);
+				$stmt->bindValue(':entryPublic', $this->entryPublic, PDO::PARAM_BOOL);
+				$stmt->bindValue(':entryVisible', $this->visible, PDO::PARAM_BOOL);
+				$stmt->execute();
+				$db = null;
+				$stmt = null;
+				//echo $result;
+
+			} catch (PDOException $e) {
+				echo 'DB_ERROR: ' . $e->getMessage();
+			} finally {
+				$db = null;
+				$stmt = null;
 			}
+			
+		
 			
 		}
 		public static function readFromDB(int $entry_ID){
@@ -105,23 +111,23 @@
 			
 
 			
-			if($db = connectDB('tagebuch')){
-				try {
-					$stmt = $db->prepare('SELECT * FROM tbl_entry WHERE entry_ID = :entry_ID');
-					$stmt->bindValue(':entry_ID', $entry_ID);
-					$stmt->execute();
-					return $entryArray = $stmt->fetch(PDO::FETCH_ASSOC);
+			$db = connectDB('tagebuch');
+			try {
+				$stmt = $db->prepare('SELECT * FROM tbl_entry WHERE entry_ID = :entry_ID');
+				$stmt->bindValue(':entry_ID', $entry_ID);
+				$stmt->execute();
+				return $entryArray = $stmt->fetch(PDO::FETCH_ASSOC);
 
-				} catch (PDOException $e) {
-					echo $e->getMessage();
-				} finally {
-					$db = null;
-					$stmt = null;
-				}
+			} catch (PDOException $e) {
+				echo $e->getMessage();
+			} finally {
+				$db = null;
+				$stmt = null;
+			}
 
 				
 
-			}
+			
 		}
 	}
 ?>

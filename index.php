@@ -189,9 +189,12 @@
 			//console.log(entryUser);
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function () {
-				loadContent('entries');
-			}
-			xhttp.open('POST', 'entries.php', true);
+				if (this.readyState == 4 && this.status == 200){
+					loadContent('entries');
+				}
+				
+			};
+			xhttp.open('POST', 'entries.php', false);
 			xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 			xhttp.send('uname='+ entryUser + '&content='+entryContent);
 		}
@@ -205,28 +208,7 @@
 			
 				<div id="effect" >
 					
-					<form action="login.php" method="POST" onsubmit="return login(this);">
-						<table>
-							<tr>
-							<td><label for="uname">Username:</label></td>
-							<td><input type="text" name="uname" id="uname"/></td>
-							</tr>
-							<tr>
-							<td><label for="passwd">Password:</label></td>
-							<td><input type="password" name="passwd" id="passwd"/></td>
-							</tr>
-							<tr>
-							<td></td>
-								<!--<td><input type="button" value="Anmelden" onclick="login()" /></td>-->
-								<td><input type="submit" value="Anmelden"></td>
-								<td></td>
-							</tr>
-						</table>
-					</form>
-					
-						
-					<button onclick="showRegistration()">Registrieren</button>
-					<!--<button onclick="runEffect()">Verstecken</button>-->
+				
 				</div>
 				
 					<button id="effectBtn" onclick="runEffect()" display="none">Login</button>

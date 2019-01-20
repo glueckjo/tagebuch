@@ -22,7 +22,16 @@
 		$users[] = User::createFromDB($entries[$key]->getUserName());
 	}
 	
+	if (isset($_POST['uname']) && isset($_POST['content'])): 
+		//var_dump($_POST);
+		$_POST['content'] = strip_tags($_POST['content'], '<a>');
+		$entry = new Entry($_POST);
 
+		/*$entries[] = $entry;
+		$users[] = $_POST['uname'];*/
+	
+		$entry->writeDB();
+	endif
 	
 ?>
 
@@ -30,12 +39,7 @@
 <button onclick="saveEntry()">Eintrag speichern</button>
 
 <?php 
-	if (isset($_POST['uname']) && isset($_POST['content'])): 
 	
-		$entry = new Entry($_POST);
-	
-		$entry->writeDB();
-	endif
 ?>
 
 
