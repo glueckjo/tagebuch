@@ -3,7 +3,7 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>Digitales Tagebuch</title>
 	<link rel="stylesheet" href="css/CSS.css" />
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript">
@@ -68,12 +68,7 @@
 		//});
 
 
-		//	TODO:
-		//		* Funktion um login-Status beim Laden der Seite zu prüfen und entsprechende Buttons, Überschriften etc. anzupassen
-		//		* toggle effect 
-		//		* sinnvolle Inhalte im effect-div bei eingeloggtem User
-		//		* Vor Login: Willkommen, nach Logout: auf Wiedersehen, nach Login: Eigene Einträge, Such-/Filter-Elemente
-		//		
+		
 
 		function login(oFormElement) {
 			//var uname = document.getElementById('uname').value;
@@ -86,6 +81,7 @@
 					document.getElementById('effect').style.display = 'none';
 					document.getElementById('logoutBtn').style.display = 'block';
 					loadContent('entries');
+					document.title = checkCookie('fname') + ' ' + checkCookie('lname');
 				}
 			};
 			xhttp.open(oFormElement.method, oFormElement.action, true);
@@ -120,6 +116,7 @@
 					document.getElementById('effect').style.display = 'none';
 					document.getElementById('logoutBtn').style.display = 'block';
 					loadContent('entries');
+					document.title = checkCookie('fname') + ' ' + checkCookie('lname');
 				}
 			};
 
@@ -141,6 +138,7 @@
 					document.getElementById('effect').style.display = 'none';
 					document.getElementById('effectBtn').style.display = 'block';
 					loadContent('goodbye');
+					document.title = 'Digitales Tagebuch';
 				}	
 			};
 			xhttp.open("GET", "logout.php", true);
@@ -177,7 +175,9 @@
 				document.getElementById('logoutBtn').style.display = 'block';
 				loadContent('entries');
 
+
 			}else{
+				document.title = 'Digitales Tagebuch';
 				document.getElementById('effectBtn').style.display = 'block';
 				document.getElementById('logoutBtn').style.display = 'none';
 				if(checkCookie('logout') == 'yes'){

@@ -57,11 +57,17 @@
 <!-- Liste der User Hier müssen hier rein mit Links  Am besten nur die User namen dann reicht die Zeile immer -->
 <div id="contentEntryAll" class="row">
 	<div id="userList" >
-		<ul>
-			<?php foreach ($users_all as $key => $value): ?>
-				<li><a href="#" onclick="return selUserEntries('<?php echo $value['uname']; ?>')"><?php echo $value['fname'] . ' ' . $value['lname'] . ' - ' . $value['uname']; ?></a>
-			<?php endforeach ?>
-		</ul>
+	
+		<?php foreach ($users_all as $key => $value): ?>
+			<details>
+				<summary><?php echo $value['uname']; ?></summary>
+				<p>
+					<a href="#" onclick="return selUserEntries('<?php echo $value['uname']; ?>')"><?php echo $value['fname'] . ' ' . $value['lname']; ?></a>
+				</p>
+			</details>
+			
+		<?php endforeach ?>
+	
 	</div>
 	
 	<!--Neuer Beitrag da muss noch ein Effect drauf mit ausblenden-->

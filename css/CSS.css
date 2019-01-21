@@ -145,3 +145,7 @@ p{
 #changeContent{
 	width: 50%;
 }
+details>p{
+	margin:0.5em;
+	font-size: 1em;
+}
