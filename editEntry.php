@@ -11,9 +11,7 @@
 
 ?>
 
-<textarea id="changeContent" >
-	<?php echo trim($entry->getContent()) ?>
-</textarea>
+<textarea id="changeContent" ><?php echo trim($entry->getContent()) ?></textarea>
 <button id="entryChangeBtn" onclick="changeEntry(<?php echo $_GET['entry_ID'] ?>)">Eintrag speichern</button>
 <input type="checkbox" name="entryPublic" id="changePublic" <?php if($entry->getEntryPublic() == 1) echo 'checked'; ?>><label for="entryPublic">Öffentlich</label>
 <input type="checkbox" name="entryVisible" id="changeVisible" <?php if($entry->getVisible() == 1) echo 'checked'; ?>><label for="entryVisible">Sichtbar</label>
