@@ -37,15 +37,7 @@
 			
 		}
 
-		/* Erzeugen eines Entry-Objektes aus der DB: in PHP gibt es kein Überladen von Funktionen / Methoden, da müssen wir uns noch was überlegen (eigene entryFromDB Klasse?)
-		function __construct(string $content, string $userName, bool $visible, bool $entryPublic, int entryID){
-			$this->content = $content;
-			$this->userName = $userName;
-			$this->visible = $visible;
-			$this->entryPublic = $entryPublic;
-		}
-		*/
-
+		
 
 		public function setEntryID($entryID){
 			$this->entryID = $entryID;

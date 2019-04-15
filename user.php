@@ -56,11 +56,7 @@
 			return $this->role;
 		}
 
-		/*!**** entfernen, wenn writeToDB() implementiert wurde ****!*/
-		public function getPWordTestingOnly(){						//
-			return $this->pword;									//
-		}															//
-		/*!**** entfernen, wenn writeToDB() implementiert wurde ****!*/
+		
 
 
 		public function setRole(int $role){
