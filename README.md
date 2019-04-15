@@ -1,12 +1,8 @@
-Tagebuch
+Tagebuch - Gruppenarbeit im Rahmen der Ausbildung zum Wirtschaftsinformatiker
 ========
+Auf Basis von PHP, HTML, CSS, JavaScript und MariaDB.
 
-Nothing to see here, it's still quite **useless** and **boring**.
 
-## TODO
+Minimale Funktionalität, Benutzer können sich registrieren, einloggen und Einträge verfassen.
 
-  * Add basic functionality, interface, etc.
-  * Add some jQuery, because it's part of the project requirements
-  * Update README accordingly, or not.
-  
-
+Die Einträge sind standardmäßig sichtbar und öffentlich. Ein Klick auf einen Eintrag gibt die Optionen diesen nicht-öffentlich zu machen, dann ist er nur für den Verfasser sichtbar, oder nicht sichtbar, dann ist der Eintrag für niemanden mehr sichtbar.
